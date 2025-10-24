@@ -3,15 +3,15 @@
 
 using namespace std;
 
-// Àü¿ª º¯¼ö ¼±¾ğ
+// ì „ì—­ ë³€ìˆ˜ ì„ ì–¸
 vector<int> A;
-long long result = 0; // Swap È½¼ö(Inversion) ÀúÀå (long long ÇÊ¼ö)
+long long result = 0; // Swap íšŸìˆ˜(Inversion) ì €ì¥ (long long í•„ìˆ˜)
 
-// ÇÔ¼ö ¿øÇü
+// í•¨ìˆ˜ ì›í˜•
 void mergeSort(int L, int R);
 void merge(int L, int M, int R);
 
-// mergeSort ÇÔ¼ö
+// mergeSort í•¨ìˆ˜
 void mergeSort(int L, int R) {
 	if (L < R) {
 		int M = L + (R - L) / 2;
@@ -21,32 +21,32 @@ void mergeSort(int L, int R) {
 	}
 }
 
-// merge ÇÔ¼ö
+// merge í•¨ìˆ˜
 void merge(int L, int M, int R) {
 	vector<int> temp;
 	temp.reserve(R - L + 1);
 	int i = L, j = M + 1;
 
 	while (i <= M && j <= R)
-		// 1. A[i] <= A[j] (Inversion ¾Æ´Ô)
+		// 1. A[i] <= A[j] (Inversion ì•„ë‹˜)
 		if (A[i] <= A[j])
 			temp.push_back(A[i++]);
-	    // 2. A[i] > A[j] (Inversion ¹ß»ı)
+	    // 2. A[i] > A[j] (Inversion ë°œìƒ)
 		else {
-			// [ÇÙ½É] ¿ŞÂÊ ¹è¿­ÀÇ ³²Àº °³¼ö (M - i + 1) ¸¸Å­ result¿¡ ´õÇÔ
+			// [í•µì‹¬] ì™¼ìª½ ë°°ì—´ì˜ ë‚¨ì€ ê°œìˆ˜ (M - i + 1) ë§Œí¼ resultì— ë”í•¨
 			result += (long long)(M - i + 1);
 			temp.push_back(A[j++]);
 		}
 
-	// ¿ŞÂÊ ¹è¿­¿¡ ³²Àº ¿ä¼Òµé ¸¶Àú »ğÀÔ
+	// ì™¼ìª½ ë°°ì—´ì— ë‚¨ì€ ìš”ì†Œë“¤ ë§ˆì € ì‚½ì…
 	while (i <= M)
 		temp.push_back(A[i++]);
 
-	// ¿À¸¥ÂÊ ¹è¿­¿¡ ³²Àº ¿ä¼Òµé ¸¶Àú »ğÀÔ
+	// ì˜¤ë¥¸ìª½ ë°°ì—´ì— ë‚¨ì€ ìš”ì†Œë“¤ ë§ˆì € ì‚½ì…
 	while (j <= R)
 		temp.push_back(A[j++]);
 
-	// Á¤·ÄµÈ temp ¹è¿­À» ¿øº» A¿¡ º¹»ç
+	// ì •ë ¬ëœ temp ë°°ì—´ì„ ì›ë³¸ Aì— ë³µì‚¬
 	for (int k = 0; k < temp.size(); k++)
 		A[L + k] = temp[k];
 }
