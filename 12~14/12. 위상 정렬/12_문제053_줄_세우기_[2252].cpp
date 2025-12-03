@@ -11,7 +11,7 @@ int main() {
 	ios::sync_with_stdio(0); cin.tie(0);
 
 	cin >> N >> M;
-	// 1. 초기화
+	// 초기화
 	link.resize(N + 1);
 	indegree.resize(N + 1);
 
@@ -40,3 +40,4 @@ int main() {
 		}
 	}
 }
+
