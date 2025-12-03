@@ -14,15 +14,15 @@ struct edge {
 	}
 };
 
-// V: Á¤Á¡ °³¼ö E: °£¼± °³¼ö K: ½ÃÀÛÁ¡ ¹øÈ£
+// V: ì •ì  ê°œìˆ˜ E: ê°„ì„  ê°œìˆ˜ K: ì‹œì‘ì  ë²ˆí˜¸
 int V, E, K;
-vector<int> minD; // ÃÖ´Ü °Å¸®
-vector<bool> vis; // ¹æ¹® ¿©ºÎ
-vector<vector<edge>> adj; // ÀÎÁ¢¸®½ºÆ®
+vector<int> minD; // ìµœë‹¨ ê±°ë¦¬
+vector<bool> vis; // ë°©ë¬¸ ì—¬ë¶€
+vector<vector<edge>> adj; // ì¸ì ‘ë¦¬ìŠ¤íŠ¸
 
 
 void Dijkstra(int start) {
-	priority_queue<edge, vector<edge>, greater<edge>> pq; // ¿ì¼±¼øÀ§ Å¥
+	priority_queue<edge, vector<edge>, greater<edge>> pq; // ìš°ì„ ìˆœìœ„ í
 	pq.push({ start, 0});
 	minD[start] = 0;
 
