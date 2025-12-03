@@ -11,11 +11,11 @@ int main() {
 	ios::sync_with_stdio(0); cin.tie(0);
 
 	cin >> N >> M;
-	// 1. ÃÊ±âÈ­
+	// 1. ì´ˆê¸°í™”
 	link.resize(N + 1);
 	indegree.resize(N + 1);
 
-	// °£¼± ÀÔ·Â
+	// ê°„ì„  ì…ë ¥
 	for (int i = 0; i < M; i++) {
 		int s, e;
 		cin >> s >> e;
@@ -23,12 +23,12 @@ int main() {
 		indegree[e]++;
 	}
 
-	// À§»ó Á¤·Ä Å¥ ÃÊ±âÈ­
+	// ìœ„ìƒ ì •ë ¬ í ì´ˆê¸°í™”
 	queue<int> q;
 	for (int i = 1; i <= N; i++)
 		if (indegree[i] == 0) q.push(i);
 
-	// À§»ó Á¤·Ä
+	// ìœ„ìƒ ì •ë ¬
 	while (!q.empty()) {
 		int now = q.front();
 		q.pop();
