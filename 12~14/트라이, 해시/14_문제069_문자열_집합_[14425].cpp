@@ -19,12 +19,12 @@ int main() {
 			cin >> arr[i - N];
 	
 	unordered_set<string> hash_set;
-	for (int i = 0; i < N; i++) // ÇØ½Ã ¼Â¿¡ s ÀúÀå
+	for (int i = 0; i < N; i++) // í•´ì‹œ ì…‹ì— s ì €ì¥
 		hash_set.insert(s[i]);
 
 	int cnt = 0;
 	for (int i = 0; i < M; i++)
-		if (hash_set.find(arr[i]) != hash_set.end()) // °Ë»çÇÒ ¹®ÀÚ¿­ÀÌ s¿¡ ÀÖÀ¸¸é
+		if (hash_set.find(arr[i]) != hash_set.end()) // ê²€ì‚¬í•  ë¬¸ìì—´ì´ sì— ìˆìœ¼ë©´
 			++cnt;
 
 	cout << cnt;
