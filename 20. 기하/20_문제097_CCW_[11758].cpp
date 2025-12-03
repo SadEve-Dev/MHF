@@ -19,4 +19,5 @@ int main() {
 	int res = cross > 0 ? 1 : cross < 0 ? -1 : 0;
 
 	cout << res;
+
 }
