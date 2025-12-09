@@ -1,95 +1,93 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 #include <queue>
-#include <algorithm> // swap »ç¿ëÀ» À§ÇØ Ãß°¡
+#include <algorithm>
 using namespace std;
 
+const int MAX = 100001;
+const int MAX_K = 17; // 2^17 > 100,000
+
 int N, M;
-int kmax;
-vector<vector<int>> tree;
-vector<int> D;
-int P[21][100001]; // Àü¿ª ¹è¿­
-vector<bool> V;
+vector<int> tree[MAX];
+int D[MAX];
+int P[MAX_K + 1][MAX];
+bool V[MAX];
 
-// ±íÀÌ¿Í 2^0 ºÎ¸ğ¸¦ ¼³Á¤
-void BFS(int node) {
-	queue<int> Q;
-	Q.push(node);
-	V[node] = true;
-	D[node] = 0; // ·çÆ® ±íÀÌ 0
+/**
+ * @brief BFSë¥¼ í†µí•´ íŠ¸ë¦¬ì˜ ê¹Šì´(Depth)ì™€ ì§ê³„ ë¶€ëª¨(2^0)ë¥¼ ì„¤ì •
+ * @param node ì‹œì‘ ë…¸ë“œ(ë£¨íŠ¸)
+ */
+void bfs(int node) {
+    queue<int> Q;
+    Q.push(node);
+    V[node] = true;
+    D[node] = 0; // ë£¨íŠ¸ ê¹Šì´ 0
 
-	while (!Q.empty()) {
-		int now = Q.front(); Q.pop();
-		for (int next : tree[now])
-			if (!V[next]) {
-				Q.push(next);
-				V[next] = true;
-				P[0][next] = now;
-				D[next] = D[now] + 1; // ºÎ¸ğ ±íÀÌ + 1
-			}
-	}
+    while (!Q.empty()) {
+        int now = Q.front();
+        Q.pop();
+        for (int next : tree[now])
+            if (!V[next]) {
+                Q.push(next);
+                V[next] = true;
+                P[0][next] = now;
+                D[next] = D[now] + 1; // ë¶€ëª¨ ê¹Šì´ + 1
+            }
+    }
 }
 
-// ÃÖ¼Ò °øÅë Á¶»ó Ã£±â
-int excuteLCA(int a, int b) {
-	// aÀÇ ±íÀÌ°¡ ´õ ±íÀ¸¸é swap
-	if (D[a] > D[b]) swap(a, b);
+/**
+ * @brief ìµœì†Œ ê³µí†µ ì¡°ìƒ(LCA)ì„ ì°¾ëŠ” í•¨ìˆ˜
+ * @param a ì²« ë²ˆì§¸ ë…¸ë“œ ë²ˆí˜¸
+ * @param b ë‘ ë²ˆì§¸ ë…¸ë“œ ë²ˆí˜¸
+ * @return ë‘ ë…¸ë“œì˜ ìµœì†Œ ê³µí†µ ì¡°ìƒ ë…¸ë“œ ë²ˆí˜¸
+ */
+int lca(int a, int b) {
+    // aì˜ ê¹Šì´ê°€ ë” ê¹Šìœ¼ë©´ swap
+    if (D[a] > D[b]) swap(a, b);
 
-	// 1. ±íÀÌ ¸ÂÃß±â (b¸¦ a¿Í °°Àº ±íÀÌ·Î ²ø¾î¿Ã¸²)
-	for (int k = kmax; k >= 0; k--)
-		if ((D[b] - D[a]) >= (1 << k))
-			b = P[k][b];
+    // 1. ê¹Šì´ ë§ì¶”ê¸° (bë¥¼ aì™€ ê°™ì€ ê¹Šì´ë¡œ ëŒì–´ì˜¬ë¦¼)
+    for (int k = MAX_K; k >= 0; k--)
+        if (D[b] - D[a] >= (1 << k))
+            b = P[k][b];
 
-	if (a == b) return a;
+    if (a == b) return a;
 
-	// 2. µ¿½Ã¿¡ ºÎ¸ğ¸¦ Ã£¾Æ ¿Ã¶ó°¡±â
-	for (int k = kmax; k >= 0; k--)
-		if (P[k][a] != P[k][b]) {
-			a = P[k][a];
-			b = P[k][b];
-		}
+    // 2. ë™ì‹œì— ë¶€ëª¨ë¥¼ ì°¾ì•„ ì˜¬ë¼ê°€ê¸°
+    for (int k = MAX_K; k >= 0; k--)
+        if (P[k][a] != P[k][b]) {
+            a = P[k][a];
+            b = P[k][b];
+        }
 
-	// ÃÖÁ¾ LCA´Â ÇöÀç ³ëµåµéÀÇ ¹Ù·Î À§ ºÎ¸ğ
-	return P[0][a];
+    // ìµœì¢… LCAëŠ” í˜„ì¬ ë…¸ë“œë“¤ì˜ ë°”ë¡œ ìœ„ ë¶€ëª¨
+    return P[0][a];
 }
 
 int main() {
-	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-	cin >> N;
+    cin >> N;
 
-	tree.resize(N + 1);
-	D.resize(N + 1);
-	// P ¹è¿­Àº Àü¿ª ¼±¾ğµÇ¾î ÀÖ¾î resize ºÒÇÊ¿ä
-	V.resize(N + 1, false);
+    for (int i = 0; i < N - 1; i++) {
+        int s, e;
+        cin >> s >> e;
+        tree[s].push_back(e);
+        tree[e].push_back(s);
+    }
 
-	for (int i = 0; i < N - 1; i++) {
-		int s, e;
-		cin >> s >> e;
-		tree[s].push_back(e);
-		tree[e].push_back(s);
-	}
+    bfs(1);
 
-	int tmp = 1;
-	kmax = 0;
-	while (tmp <= N) {
-		tmp <<= 1;
-		kmax++;
-	}
+    // P[k][n] ê°’ ê³„ì‚° (Binary Lifting)
+    for (int k = 1; k <= MAX_K; k++)
+        for (int n = 1; n <= N; n++)
+            if (P[k - 1][n] != 0) // ë¶€ëª¨ê°€ ì¡´ì¬í•  ë•Œë§Œ ê°±ì‹ 
+                P[k][n] = P[k - 1][P[k - 1][n]];
 
-	BFS(1);
-
-	// P[k][n] °ª °è»ê (Binary Lifting)
-	for (int k = 1; k <= kmax; k++)
-		for (int n = 1; n <= N; n++)
-			P[k][n] = P[k - 1][P[k - 1][n]];
-
-	cin >> M;
-	for (int i = 0; i < M; i++) {
-		int a, b;
-		cin >> a >> b;
-		int LCA = excuteLCA(a, b);
-		cout << LCA << "\n";
-	}
+    cin >> M;
+    for (int i = 0; i < M; i++) {
+        int a, b;
+        cin >> a >> b;
+        cout << lca(a, b) << "\n";
+    }
 }
